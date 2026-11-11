@@ -3159,15 +3159,37 @@ function Library:CreateWindow(...)
             end);
         end;
 
-        function Tab:ShowTab()
-            for _, Tab in next, Window.Tabs do
-                Tab:HideTab();
+       function Tab:ShowTab()
+            for _, OtherTab in next, Window.Tabs do
+                OtherTab:HideTab();
             end;
-
+        
             Blocker.BackgroundTransparency = 0;
             TabButton.BackgroundColor3 = Library.MainColor;
             Library.RegistryMap[TabButton].Properties.BackgroundColor3 = 'MainColor';
+        
             TabFrame.Visible = true;
+        
+            -- fade + slide do conteúdo
+            local Info = TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+            for _, Side in next, { LeftSide, RightSide } do
+                Side.Position = Side.Position + UDim2.fromOffset(12, 0)
+                TweenService:Create(Side, Info, {
+                    Position = Side.Position - UDim2.fromOffset(12, 0)
+                }):Play()
+            end
+        
+            for _, Desc in next, TabFrame:GetDescendants() do
+                if Desc:IsA('TextLabel') or Desc:IsA('TextBox') then
+                    local Original = Desc.TextTransparency
+                    Desc.TextTransparency = 1
+                    TweenService:Create(Desc, Info, { TextTransparency = Original }):Play()
+                elseif Desc:IsA('Frame') and Desc.Name ~= 'TabFrame' and Desc.BackgroundTransparency < 1 then
+                    local Original = Desc.BackgroundTransparency
+                    Desc.BackgroundTransparency = 1
+                    TweenService:Create(Desc, Info, { BackgroundTransparency = Original }):Play()
+                end
+            end
         end;
 
         function Tab:HideTab()
