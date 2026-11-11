@@ -1920,6 +1920,10 @@ do
                 end
             end
 
+            for _, Addon in next, Toggle.Addons do
+                if Addon.Update then Addon:Update() end
+            end
+
             Library:SafeCallback(Toggle.Callback, Toggle.Value);
             Library:SafeCallback(Toggle.Changed, Toggle.Value);
             Library:UpdateDependencyBoxes();
