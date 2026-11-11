@@ -1256,7 +1256,7 @@ do
                     local Key;
 
                     if Input.UserInputType == Enum.UserInputType.Keyboard then
-                        Key = Input.KeyCode.Name;
+                        Key = Input.KeyCode == Enum.KeyCode.Escape and 'None' or Input.KeyCode.Name;
                     elseif Input.UserInputType == Enum.UserInputType.MouseButton1 then
                         Key = 'MB1';
                     elseif Input.UserInputType == Enum.UserInputType.MouseButton2 then
