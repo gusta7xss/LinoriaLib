@@ -3750,8 +3750,5 @@ function Library:CreateTopBar(Buttons)
     return Bar;
 end
 
-    return Bar;
-end
-
 getgenv().Library = Library
 return Library
