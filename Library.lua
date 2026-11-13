@@ -665,7 +665,7 @@ do
             Parent = PickerFrameInner;
         });
 
-                local GradientRowY = Info.Transparency and 270 or 251
+        local GradientRowY = Info.Transparency and 270 or 251
         PickerFrameOuter.Size = UDim2.fromOffset(230, GradientRowY + 24)
 
         ColorPicker.Gradient = Info.GradientDefault or false
