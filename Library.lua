@@ -665,7 +665,58 @@ do
             Parent = PickerFrameInner;
         });
 
+                local GradientRowY = Info.Transparency and 270 or 251
+        PickerFrameOuter.Size = UDim2.fromOffset(230, GradientRowY + 24)
 
+        ColorPicker.Gradient = Info.GradientDefault or false
+        ColorPicker.GradientCallback = Info.GradientCallback or function(State) end
+
+        local GradientBoxOuter = Library:Create('Frame', {
+            BorderColor3 = Color3.new(0, 0, 0);
+            Position = UDim2.fromOffset(4, GradientRowY);
+            Size = UDim2.fromOffset(14, 14);
+            ZIndex = 17;
+            Parent = PickerFrameInner;
+        });
+
+        local GradientBoxInner = Library:Create('Frame', {
+            BackgroundColor3 = ColorPicker.Gradient and Library.AccentColor or Library.MainColor;
+            BorderColor3 = Library.OutlineColor;
+            BorderMode = Enum.BorderMode.Inset;
+            Size = UDim2.new(1, 0, 1, 0);
+            ZIndex = 18;
+            Parent = GradientBoxOuter;
+        });
+
+        Library:AddToRegistry(GradientBoxInner, { BorderColor3 = 'OutlineColor' });
+
+        Library:CreateLabel({
+            Position = UDim2.fromOffset(22, GradientRowY);
+            Size = UDim2.new(1, -26, 0, 14);
+            TextXAlignment = Enum.TextXAlignment.Left;
+            TextSize = 14;
+            Text = 'Gradient';
+            ZIndex = 17;
+            Parent = PickerFrameInner;
+        });
+
+        local GradientBtn = Library:Create('TextButton', {
+            BackgroundTransparency = 1;
+            Position = UDim2.fromOffset(4, GradientRowY);
+            Size = UDim2.new(1, -8, 0, 14);
+            Text = '';
+            ZIndex = 19;
+            Parent = PickerFrameInner;
+        });
+
+        GradientBtn.MouseButton1Click:Connect(function()
+            ColorPicker.Gradient = not ColorPicker.Gradient
+            GradientBoxInner.BackgroundColor3 = ColorPicker.Gradient and Library.AccentColor or Library.MainColor
+            Library:SafeCallback(ColorPicker.GradientCallback, ColorPicker.Gradient)
+            Library:AttemptSave()
+        end);
+        
+        
         local ContextMenu = {}
         do
             ContextMenu.Options = {}
