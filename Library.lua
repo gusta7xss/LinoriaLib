@@ -3683,65 +3683,72 @@ Players.PlayerAdded:Connect(OnPlayerChange);
 Players.PlayerRemoving:Connect(OnPlayerChange);
 
 function Library:CreateTopBar(Buttons)
+    local Count = #Buttons
+    local BtnSize, Gap, Pad = 38, 6, 6
+
     local Bar = Library:Create('Frame', {
         AnchorPoint = Vector2.new(0.5, 0);
         BackgroundColor3 = Library.BackgroundColor;
         BorderColor3 = Library.OutlineColor;
-        Position = UDim2.new(0.5, 0, 0, 8);
-        Size = UDim2.fromOffset(#Buttons * 92 + 8, 36);
+        Position = UDim2.new(0.5, 0, 0, 10);
+        Size = UDim2.fromOffset(Count * BtnSize + (Count - 1) * Gap + Pad * 2, BtnSize + Pad * 2);
         ZIndex = 50;
         Parent = ScreenGui;
     });
 
     Library:AddToRegistry(Bar, { BackgroundColor3 = 'BackgroundColor'; BorderColor3 = 'OutlineColor' });
-
-    local Accent = Library:Create('Frame', {
-        BackgroundColor3 = Library.AccentColor;
-        BorderSizePixel = 0;
-        Size = UDim2.new(1, 0, 0, 2);
-        ZIndex = 51;
-        Parent = Bar;
-    });
-
-    Library:AddToRegistry(Accent, { BackgroundColor3 = 'AccentColor' });
+    Library:Create('UICorner', { CornerRadius = UDim.new(0, 6); Parent = Bar });
 
     Library:Create('UIListLayout', {
         FillDirection = Enum.FillDirection.Horizontal;
-        Padding = UDim.new(0, 4);
+        Padding = UDim.new(0, Gap);
+        HorizontalAlignment = Enum.HorizontalAlignment.Center;
         VerticalAlignment = Enum.VerticalAlignment.Center;
         SortOrder = Enum.SortOrder.LayoutOrder;
-        Parent = Bar;
-    });
-
-    Library:Create('UIPadding', {
-        PaddingLeft = UDim.new(0, 4);
-        PaddingRight = UDim.new(0, 4);
         Parent = Bar;
     });
 
     for i, Info in ipairs(Buttons) do
         local Btn = Library:Create('TextButton', {
             BackgroundColor3 = Library.MainColor;
-            BorderColor3 = Library.OutlineColor;
+            BorderSizePixel = 0;
+            AutoButtonColor = false;
             Font = Library.Font;
-            Text = Info.Text;
+            Text = Info.Icon and '' or (Info.Text or '');
             TextColor3 = Library.FontColor;
             TextSize = 14;
-            Size = UDim2.fromOffset(88, 26);
-            AutoButtonColor = false;
+            Size = UDim2.fromOffset(BtnSize, BtnSize);
             LayoutOrder = i;
             ZIndex = 51;
             Parent = Bar;
         });
 
-        Library:AddToRegistry(Btn, { BackgroundColor3 = 'MainColor'; BorderColor3 = 'OutlineColor'; TextColor3 = 'FontColor' });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 5); Parent = Btn });
 
+        if Info.Icon then
+            Library:Create('ImageLabel', {
+                BackgroundTransparency = 1;
+                AnchorPoint = Vector2.new(0.5, 0.5);
+                Position = UDim2.new(0.5, 0, 0.5, 0);
+                Size = UDim2.fromOffset(20, 20);
+                Image = Info.Icon;
+                ImageColor3 = Library.FontColor;
+                ZIndex = 52;
+                Parent = Btn;
+            });
+        end
+
+        Btn.MouseEnter:Connect(function() Btn.BackgroundColor3 = Library.AccentColorDark end);
+        Btn.MouseLeave:Connect(function() Btn.BackgroundColor3 = Library.MainColor end);
         Btn.MouseButton1Click:Connect(function()
             if Info.Callback then
                 Library:SafeCallback(Info.Callback);
             end
         end);
     end
+
+    return Bar;
+end
 
     return Bar;
 end
