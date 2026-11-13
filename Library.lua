@@ -3598,6 +3598,7 @@ function Library:CreateWindow(...)
         local FadeTime = Config.MenuFadeTime;
         Fading = true;
         Toggled = (not Toggled);
+        if Library.OnToggle then Library.OnToggle(Toggled) end;
         ModalElement.Modal = Toggled;
 
         if Toggled then
@@ -3690,7 +3691,7 @@ function Library:CreateTopBar(Buttons)
         AnchorPoint = Vector2.new(0.5, 0);
         BackgroundColor3 = Library.BackgroundColor;
         BorderColor3 = Library.OutlineColor;
-        Position = UDim2.new(0.5, 0, 0, 10);
+        Position = UDim2.new(0.5, 0, 0, 44);
         Size = UDim2.fromOffset(Count * BtnSize + (Count - 1) * Gap + Pad * 2, BtnSize + Pad * 2);
         ZIndex = 50;
         Parent = ScreenGui;
