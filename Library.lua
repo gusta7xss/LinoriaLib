@@ -709,6 +709,11 @@ do
             Parent = PickerFrameInner;
         });
 
+        function ColorPicker:SetGradient(State)
+            ColorPicker.Gradient = State
+            GradientBoxInner.BackgroundColor3 = State and Library.AccentColor or Library.MainColor
+        end
+
         GradientBtn.MouseButton1Click:Connect(function()
             ColorPicker.Gradient = not ColorPicker.Gradient
             GradientBoxInner.BackgroundColor3 = ColorPicker.Gradient and Library.AccentColor or Library.MainColor
