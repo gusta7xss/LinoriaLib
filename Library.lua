@@ -3682,5 +3682,69 @@ end;
 Players.PlayerAdded:Connect(OnPlayerChange);
 Players.PlayerRemoving:Connect(OnPlayerChange);
 
+function Library:CreateTopBar(Buttons)
+    local Bar = Library:Create('Frame', {
+        AnchorPoint = Vector2.new(0.5, 0);
+        BackgroundColor3 = Library.BackgroundColor;
+        BorderColor3 = Library.OutlineColor;
+        Position = UDim2.new(0.5, 0, 0, 8);
+        Size = UDim2.fromOffset(#Buttons * 92 + 8, 36);
+        ZIndex = 50;
+        Parent = ScreenGui;
+    });
+
+    Library:AddToRegistry(Bar, { BackgroundColor3 = 'BackgroundColor'; BorderColor3 = 'OutlineColor' });
+
+    local Accent = Library:Create('Frame', {
+        BackgroundColor3 = Library.AccentColor;
+        BorderSizePixel = 0;
+        Size = UDim2.new(1, 0, 0, 2);
+        ZIndex = 51;
+        Parent = Bar;
+    });
+
+    Library:AddToRegistry(Accent, { BackgroundColor3 = 'AccentColor' });
+
+    Library:Create('UIListLayout', {
+        FillDirection = Enum.FillDirection.Horizontal;
+        Padding = UDim.new(0, 4);
+        VerticalAlignment = Enum.VerticalAlignment.Center;
+        SortOrder = Enum.SortOrder.LayoutOrder;
+        Parent = Bar;
+    });
+
+    Library:Create('UIPadding', {
+        PaddingLeft = UDim.new(0, 4);
+        PaddingRight = UDim.new(0, 4);
+        Parent = Bar;
+    });
+
+    for i, Info in ipairs(Buttons) do
+        local Btn = Library:Create('TextButton', {
+            BackgroundColor3 = Library.MainColor;
+            BorderColor3 = Library.OutlineColor;
+            Font = Library.Font;
+            Text = Info.Text;
+            TextColor3 = Library.FontColor;
+            TextSize = 14;
+            Size = UDim2.fromOffset(88, 26);
+            AutoButtonColor = false;
+            LayoutOrder = i;
+            ZIndex = 51;
+            Parent = Bar;
+        });
+
+        Library:AddToRegistry(Btn, { BackgroundColor3 = 'MainColor'; BorderColor3 = 'OutlineColor'; TextColor3 = 'FontColor' });
+
+        Btn.MouseButton1Click:Connect(function()
+            if Info.Callback then
+                Library:SafeCallback(Info.Callback);
+            end
+        end);
+    end
+
+    return Bar;
+end
+
 getgenv().Library = Library
 return Library
