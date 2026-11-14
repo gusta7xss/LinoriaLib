@@ -3598,7 +3598,7 @@ function Library:CreateWindow(...)
         local FadeTime = Config.MenuFadeTime;
         Fading = true;
         Toggled = (not Toggled);
-        if Library.OnToggle then Library.OnToggle(Toggled) end;
+        if Library.OnToggle then pcall(Library.OnToggle, Toggled) end;
         ModalElement.Modal = Toggled;
 
         if Toggled then
